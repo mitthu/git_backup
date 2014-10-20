@@ -40,13 +40,19 @@ function process_repo()
 	fi
 }
 
-# Process all repos mentioned in the data store.
-function process_repos()
+# Fetch the repo list.
+function fetch_repo_list()
 {
 	echo -n "Fetching repo list from $REPO_LIST_LOCATION ... "
 	source $REPO_LIST_LOCATION
 	echo "DONE"
-	
+}
+
+# Process all repos mentioned in the data store.
+function process_repos()
+{
+	fetch_repo_list
+
 	# Pocess each repo in the repo list.
 	while [[ $#REPOS > 1 ]]
 	do

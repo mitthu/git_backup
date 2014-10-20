@@ -6,5 +6,6 @@
 REPOS=(\
 	"bitbucket-backup.git"  "https://github.com/samkuehn/bitbucket-backup.git" \
 	"github-backup.git"     "https://github.com/joeyh/github-backup.git" \
+	"homeshick.git"         "https://github.com/andsens/homeshick.git" \
 )
 

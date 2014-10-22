@@ -17,7 +17,7 @@ function usage()
 	echo -e "update - Clone/Fetch changes from all tracked repos"
 	echo -e "clean  - Remove all untracked repos"
 	echo -e "config - List all config parameters"
-	exit
+	echo -e "help   - Display this menu"
 }
 
 # Dump config
@@ -133,4 +133,15 @@ function clean_repos()
 		echo "DONE"
 	done
 }
+
+[[ -z $1 ]] && { echo "No options passed."; usage; exit; }
+
+case $1 in
+	update)	process_repos ;;
+	clean)	clean_repos	;;
+	config)	dump_config ;;
+	help)	usage ;;
+	*)
+		echo "Unrecognized option."; usage ;;
+esac
 

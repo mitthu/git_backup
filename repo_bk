@@ -44,7 +44,7 @@ function process_repo()
 function fetch_repo_list()
 {
 	echo -n "Fetching repo list from $REPO_LIST_LOCATION ... "
-	source $REPO_LIST_LOCATION
+	REPOS=(`cat $REPO_LIST_LOCATION`)
 	echo "DONE"
 }
 
@@ -66,5 +66,52 @@ function process_repos()
 # If the repo isn't tracked anymore, then remove the repo.
 function clean_repos()
 {
-	echo "Cleaning repos ..."
+	fetch_repo_list
+
+	# Initialize array to store repo names.
+	local NAMES=()
+
+	# Get name of all tracked repos.
+	echo -n "Get name of all tracked repos ... "
+	local i=0
+	local entries=${#REPOS[@]}
+
+	while [[ $i < $entries ]]
+	do
+		if [[ $(( $i % 2 )) == 0 ]]
+		then
+			NAMES+=(${REPOS[$i]})
+		fi
+		i=$(( $i + 1 ))
+	done
+	echo "DONE"
+
+
+	# Get all repos that are present in the backup location.
+	# Array: difference = OLD - NAMES
+	echo -n "Generate list of untracked repos ... "
+	local OLD=`ls $BASE_LOCATION`
+	OLD=(${OLD//\n/ /})
+	local difference=()
+
+	for repo in ${OLD[@]}
+	do
+		local skip=
+		for i in ${NAMES[@]}
+		do
+			[[ $repo == $i ]] && { skip=1; break; }
+		done
+		[[ -n $skip ]] || difference+=("$repo")
+	done
+	echo "DONE"
+
+	# Removing untracked repos.
+	for repo in ${difference[@]}
+	do
+		local file="${BASE_LOCATION}$repo"
+		echo -n "Removing $file ... "
+		rm -rf $file
+		echo "DONE"
+	done
 }
+

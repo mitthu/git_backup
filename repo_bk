@@ -8,6 +8,25 @@ BASE_LOCATION=$HOME/SysOp/repos_bk/
 # Location of the script that lists the repos to backup.
 REPO_LIST_LOCATION="$HOME/.bin/repo_bk.list"
 
+# Command-line Usage
+function usage()
+{
+	echo "Usage:"
+	echo -e "\t $0 <options>"
+	echo "Options:"
+	echo -e "update - Clone/Fetch changes from all tracked repos"
+	echo -e "clean  - Remove all untracked repos"
+	echo -e "config - List all config parameters"
+	exit
+}
+
+# Dump config
+function dump_config()
+{
+	echo "Backup location: "$BASE_LOCATION
+	echo "List of tracked repos (file): "$REPO_LIST_LOCATION
+}
+
 # Clone a remote repo to a bare repo.
 function clone_repo()
 {

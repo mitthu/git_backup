@@ -6,10 +6,10 @@ DEFAULT_CONFIG="$HOME/.me/config/repos.sh"
 
 # Base location for repo storage.
 # Should end with a trailing '/'.
-BASE_LOCATION=$HOME/SysOp/repos_bk/
+BASE_LOCATION=$HOME/repos/
 
 # Location of the script that lists the repos to backup.
-REPO_LIST_LOCATION="$HOME/.bin/repo_bk.list"
+REPO_LIST_LOCATION="$HOME/.repos.list"
 
 # Command-line Usage
 function usage()

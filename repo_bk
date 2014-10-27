@@ -73,11 +73,11 @@ function process_repos()
 	fetch_repo_list
 
 	# Pocess each repo in the repo list.
-	while [[ $#REPOS > 1 ]]
+	local entries_count=${#REPOS[@]}
+
+	for (( i=0; i < entries_count; i+=2 ))
 	do
-		process_repo $REPOS[1] $REPOS[2]
-		shift REPOS
-		shift REPOS
+		process_repo ${REPOS[$i]} ${REPOS[$i+1]}
 	done
 }
 

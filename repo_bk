@@ -1,6 +1,9 @@
 #!/bin/bash
 # Date of Creation: 20-Oct-2014
 
+# Location of config file for named parameters
+DEFAULT_CONFIG="$HOME/.me/config/repos.sh"
+
 # Base location for repo storage.
 # Should end with a trailing '/'.
 BASE_LOCATION=$HOME/SysOp/repos_bk/
@@ -12,12 +15,36 @@ REPO_LIST_LOCATION="$HOME/.bin/repo_bk.list"
 function usage()
 {
 	echo "Usage:"
-	echo -e "\t $0 <options>"
+	echo -e "\t $0 <options> [optional: config name]"
 	echo "Options:"
 	echo -e "update - Clone/Fetch changes from all tracked repos"
 	echo -e "clean  - Remove all untracked repos"
 	echo -e "config - List all config parameters"
 	echo -e "help   - Display this menu"
+	echo  "Remarks:"
+	echo -e "- Location of config file: $DEFAULT_CONFIG"
+}
+
+# Load config
+function load_config()
+{
+	local config_name=$2
+	source $DEFAULT_CONFIG
+	if [[ -n $config_name ]]
+	then
+		local config=${CONFIG[`echo $config_name`]}
+		if [[ -z $config ]]
+		then
+			echo "Invalid config name: $config_name" >&2
+			exit
+		fi
+		
+		# Convert config to array
+		config=($config)
+		
+		BASE_LOCATION=${config[0]}
+		REPO_LIST_LOCATION=${config[1]}
+	fi
 }
 
 # Dump config
@@ -135,6 +162,9 @@ function clean_repos()
 }
 
 [[ -z $1 ]] && { echo "No options passed."; usage; exit; }
+
+# Update config if name is passed.
+load_config $*
 
 case $1 in
 	update)	process_repos ;;
